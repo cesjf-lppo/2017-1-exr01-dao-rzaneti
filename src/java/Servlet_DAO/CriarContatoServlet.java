@@ -47,7 +47,7 @@ public class CriarContatoServlet extends HttpServlet {
             dao.cria(novoContato);
         } catch (Exception ex) {
            request.setAttribute("mensagem", ex);
-           request.getRequestDispatcher("WEB-INF/novo.contato.jsp").forward(request, response);
+           request.getRequestDispatcher("WEB-INF/novo-contato.jsp").forward(request, response);
            return;
         }
         
