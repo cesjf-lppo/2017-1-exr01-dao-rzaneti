@@ -5,8 +5,12 @@
  */
 package Servlet_DAO;
 
+import Classes_DAO.ContatoDAO;
+import Exercico_DAO_01.Contato;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,6 +37,24 @@ public class CriarContatoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Contato novoContato = new Contato();
+        novoContato.setNome(request.getParameter("nome"));
+        novoContato.setSobrenome(request.getParameter("sobrenome"));
+        novoContato.setTelefone(request.getParameter("telefone"));
+        
+        ContatoDAO dao = new ContatoDAO();
+        try {
+            dao.cria(novoContato);
+        } catch (Exception ex) {
+           request.setAttribute("mensagem", ex);
+           request.getRequestDispatcher("WEB-INF/novo.contato.jsp").forward(request, response);
+           return;
+        }
+        
+        response.sendRedirect("contatos.html");
+        
+        
+        
         
    
 }

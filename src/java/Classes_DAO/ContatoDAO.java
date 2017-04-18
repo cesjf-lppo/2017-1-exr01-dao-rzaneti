@@ -55,5 +55,27 @@ public class ContatoDAO {
         }
     
     }
+
+    public void cria(Contato novoContato) throws Exception {
+        try {
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            
+            Connection conexao = DriverManager.getConnection("jdbc:derby://localhost:1527/lpto-2017-1", "usuario", "senha");
+            
+            Statement operacao = conexao.createStatement();
+            
+            operacao.executeUpdate("INSERT INTO contato(nome, sobrenome, telefone) VALUES('"
+                    +novoContato.getNome()+ "', '"
+                    +novoContato.getSobrenome()+ "', '"
+                    +novoContato.getTelefone()+ "') ");
+            
+        } catch (ClassNotFoundException ex) {
+            throw new Exception("Erro ao carregar o driver!", ex);
+        } catch(SQLException ex){
+            throw new Exception("Erro ao inserir o contato");
+        
+        }
+        
+    }
     
 }
