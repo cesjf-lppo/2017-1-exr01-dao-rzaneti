@@ -25,6 +25,7 @@ public class ContatoDAO {
     
     private PreparedStatement opListar;
     private PreparedStatement opNovo;
+    private PreparedStatement opAtualiza;
     
     public ContatoDAO() throws Exception{
         
@@ -33,6 +34,8 @@ public class ContatoDAO {
         opListar = conexao.prepareStatement("SELECT * FROM contato"); 
         
         opNovo = conexao.prepareStatement("INSERT INTO contato (nome, sobrenome, telefone) VALUES(?, ?,?)");
+        
+        opAtualiza = conexao.prepareStatement("UPDATE contato SET nome = ?, sobrenome = ?, telefone = ? WHERE id =? ");
     
     }    
     
@@ -49,17 +52,13 @@ public class ContatoDAO {
                 novoContato.setSobrenome(resultado.getString("sobrenome"));
                 novoContato.setTelefone(resultado.getString("telefone"));
                 
-                contatos.add(novoContato);
-            
-            }            
-            
+                contatos.add(novoContato);            
+            }                        
             return contatos;
         } catch(SQLException ex){
-            throw new Exception("Erro ao listar os contatos no banco!", ex);
-                    
+            throw new Exception("Erro ao listar os contatos no banco!", ex);                   
         
-        }
-    
+        }    
     }
 
     public void cria(Contato novoContato) throws Exception {
@@ -68,13 +67,26 @@ public class ContatoDAO {
             opNovo.setString(1, novoContato.getNome());
             opNovo.setString(2, novoContato.getSobrenome());
             opNovo.setString(3, novoContato.getTelefone());      
-            
-            
-            opNovo.executeUpdate();
-            
+            opNovo.executeUpdate();            
         
         } catch(SQLException ex){
             throw new Exception("Erro ao inserir o contato");
+        
+        }
+        
+    }
+    
+    public void atualiza(Contato contato) throws Exception {
+        try {
+            opAtualiza.clearParameters();
+            opAtualiza.setString(1, contato.getNome());
+            opAtualiza.setString(2, contato.getSobrenome());
+            opAtualiza.setString(3, contato.getTelefone());
+            opAtualiza.setLong(4, contato.getId());
+            opAtualiza.executeUpdate();            
+        
+        } catch(SQLException ex){
+            throw new Exception("Erro ao atualizar o contato");
         
         }
         
